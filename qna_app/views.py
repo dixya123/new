@@ -58,10 +58,9 @@ def delete_question(request,id):
 def up_vote(request,id):
 
     instance=QuestionModel.objects.get(id=id)
-    vote= instance.question_votes +1
-    instance.question_votes = vote
+    instance.question_votes +=1
     instance.save()
-    redirect('qna:read')
+    return redirect('qna:read')
 
 
 def questionlist(request):
