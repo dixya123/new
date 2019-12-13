@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import QuestionForm
-from .models import QuestionModel, CategoryModel
+from .models import QuestionModel, CategoryModel,AnswerModel
 from django.http import HttpResponse
 from django.views.generic import CreateView, ListView
 
@@ -54,6 +54,15 @@ def delete_question(request,id):
     question = QuestionModel.objects.get(id=id)
     question.delete()
     return redirect('qna:read')
+
+def question_detail(request,id):
+    question =QuestionModel.objects.get(id=id)
+    answers= AnswerModel.objects.filter(question=id)
+    d={
+        'question': question,
+        'answers': answers
+    }
+    return render(request,'details.html',d)
 
 def up_vote(request,id):
 
