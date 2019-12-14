@@ -1,0 +1,47 @@
+{%extends 'base.html' %}
+{% block title %}
+    {{question.title}}
+{%endblock%}
+
+{% block main_body %}
+<div class="card">
+<div class="card-body">
+       <h5>{{question.title}}</h5> 
+       <h4>{{question.question_desc}}</h4>
+       <h4>Votes: {{question.question_votes}}</h4><br>
+       <h4>Asked By: Dixya</h4>
+        <a href="{% url 'qna:update' question.id %}"><button>UPDATE</button></a>
+        <a href="{% url 'qna:delete' question.id %}"><button >DELETE</button></a>
+        <a href="{% url 'qna:upvote' question.id %}"><button >UpVote</button></a>
+        <br> <br>
+</div>
+</div>
+<form method="POST">
+    {%csrf_token%}
+    <div class="form_group">
+        <label for="answer">Your Answer:</label> 
+        <textarea class="form-control" name="answer" cols="100px"></textarea>
+        <button class="btn-success" type="submit" value="submit">Submit</button>
+    </div>
+
+
+
+</form>
+<br>
+
+<!-- Answer:<br>
+<textarea name="answer" cols="100px" >Enter text here...</textarea>
+<button>Submit</button></a>
+ <br>  -->
+ <h5>Answers:</h5> 
+ <div class="card">
+        <div class="card-body">
+          
+                {%for ans in answers%}
+                <br>{{ans.answer_desc}}
+                {%endfor%}
+        </div>
+    </div>
+
+
+{%endblock%}

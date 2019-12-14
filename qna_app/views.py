@@ -56,13 +56,19 @@ def delete_question(request,id):
     return redirect('qna:read')
 
 def question_detail(request,id):
-    question =QuestionModel.objects.get(id=id)
+    question =QuestionModel.objects.filter(id=id).first()
+    if request.method=="POST":
+        answer= AnswerModel(answer_desc = request.POST['answer'],question=question)
+        answer.save(force_insert=True)
+        print('parameter', request.POST['answer'])
+
     answers= AnswerModel.objects.filter(question=id)
+    
     d={
         'question': question,
         'answers': answers
     }
-    return render(request,'details.html',d)
+    return render(request,'detail.html',d)
 
 def up_vote(request,id):
 
@@ -73,9 +79,15 @@ def up_vote(request,id):
 
 
 def questionlist(request):
-    lists = QuestionModel.objects.all()
-    return render (request,"questionmodel_list.html",{'question_list':lists})
+    if('id' in request.session):
+        #id= request.session['id'] 
+        lists= QuestionModel.objects.all()
+        return render (request,'questionmodel_list.html',{'question_list':lists})
+    else:
 
+        return redirect ('user:login')
+
+    
 
 class QuestionModelCreateView(CreateView):
     model = QuestionModel
@@ -84,3 +96,22 @@ class QuestionModelCreateView(CreateView):
 class QuestionModelListView(ListView):
     model = QuestionModel
     queryset = QuestionModel.objects.all()
+
+def test(request):
+    return render(request,'test.html')
+
+def detail(request,id):
+    question =QuestionModel.objects.get(id=id)
+    answers= AnswerModel.objects.filter(question=id)
+    d={
+        'question': question,
+        'answers': answers
+    }
+    return render(request,'detail.html',d)
+def ques_list(request):
+    question=QuestionModel.objects.all()
+    return render(request,'ques_list.html',{'question':question})
+    
+
+
+
